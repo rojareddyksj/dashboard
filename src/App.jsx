@@ -12,7 +12,7 @@ const App = () => {
     const [loading, setLoading] = useState(true);
     const [city] = useState("Chittoor");
     const [temperatureData, setTemperatureData] = useState([]);
-    
+    const [windSpeedData, setWindSpeedData] = useState([]);  // State for wind speed data
     const [weeklyData, setWeeklyData] = useState([]);
     const [components, setComponents] = useState(() => {
         const savedComponents = localStorage.getItem("components");
@@ -25,7 +25,7 @@ const App = () => {
                 { id: "wind", type: "card", title: "Wind Speed", content: "Wind Speed" },
                 { id: "sunrise_sunset", type: "card", title: "Sunrise & Sunset", content: "Sunrise/Sunset" },
                 { id: "graph", type: "graph", title: "Temperature Trend" },
-                { id: "wind_speed_graph", type: "graph", title: "Wind Speed Trend" },  // New graph component for wind speed
+                { id: "wind_speed_graph", type: "graph", title: "Wind Speed Trend" },
                 { id: "weekly_forecast", type: "graph", title: "Weekly Forecast" },
             ];
     });
@@ -35,7 +35,7 @@ const App = () => {
             try {
                 // Fetch current weather data
                 const currentWeatherResponse = await axios.get(
-                    `https://api.openweathermap.org/data/2.5/weather?q=Chittoor&units=metric&appid=f900341674a127499963b88884b4a469`
+                    `https://api.openweathermap.org/data/2.5/weather?q=Chittoor&units=metric&appid=ffbe4cce9a45f53595e4095f2da8f71c`
                 );
                 setWeather(currentWeatherResponse.data);
 
@@ -52,7 +52,7 @@ const App = () => {
 
                 // Fetch 5-day forecast data
                 const forecastResponse = await axios.get(
-                    `https://api.openweathermap.org/data/2.5/forecast?q=Chittoor&units=metric&appid=f900341674a127499963b88884b4a469`
+                    `https://api.openweathermap.org/data/2.5/forecast?q=Chittoor&units=metric&appid=ffbe4cce9a45f53595e4095f2da8f71c`
                 );
 
                 // Log the raw API response to inspect the data
@@ -112,6 +112,17 @@ const App = () => {
         autoFit: true,
     };
 
+    const windSpeedChartConfig = {
+        data: windSpeedData,
+        xField: "time",
+        yField: "windSpeed",
+        seriesField: "time",
+        label: { style: { fill: "#aaa" } },
+        point: { size: 5, shape: "diamond" },
+        smooth: true,
+        color: "#1890ff",
+        autoFit: true,
+    };
 
     const weeklyForecastConfig = {
         data: weeklyData,
@@ -174,24 +185,24 @@ const App = () => {
                                                                             component.id === "temperature"
                                                                                 ? weather?.main?.temp
                                                                                 : component.id === "description"
-                                                                                    ? weather?.weather[0]?.description
-                                                                                    : component.id === "humidity"
-                                                                                        ? weather?.main?.humidity
-                                                                                        : component.id === "wind"
-                                                                                            ? weather?.wind?.speed
-                                                                                            : component.id === "sunrise_sunset"
-                                                                                                ? `Sunrise: ${new Date(
-                                                                                                    weather?.sys?.sunrise * 1000
-                                                                                                ).toLocaleTimeString()} / Sunset: ${new Date(
-                                                                                                    weather?.sys?.sunset * 1000
-                                                                                                ).toLocaleTimeString()}`
-                                                                                                : "N/A"
+                                                                                ? weather?.weather[0]?.description
+                                                                                : component.id === "humidity"
+                                                                                ? weather?.main?.humidity
+                                                                                : component.id === "wind"
+                                                                                ? weather?.wind?.speed
+                                                                                : component.id === "sunrise_sunset"
+                                                                                ? `Sunrise: ${new Date(
+                                                                                    weather?.sys?.sunrise * 1000
+                                                                                ).toLocaleTimeString()} / Sunset: ${new Date(
+                                                                                    weather?.sys?.sunset * 1000
+                                                                                ).toLocaleTimeString()}`
+                                                                                : "N/A"
                                                                         }
                                                                     />
                                                                 </Card>
                                                             ) : (
                                                                 <Card title={component.title} bordered={false}>
-                                                                    <div style={{ height: "300px" ,width:"300px"}}>
+                                                                    <div style={{ height: "300px", width: "300px" }}>
                                                                         {component.id === "graph" ? (
                                                                             <Line {...chartConfig} />
                                                                         ) : component.id === "wind_speed_graph" ? (
