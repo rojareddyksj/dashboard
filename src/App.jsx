@@ -42,7 +42,7 @@ const App = () => {
                 // Fetch temperature history (mocked here for simplicity)
                 const tempHistory = [
                     { time: "11 AM", temp: 22 },
-                    { time: "3 AM", temp: 21 },
+                    { time: "2 AM", temp: 21 },
                     { time: "6 AM", temp: 20 },
                     { time: "9 AM", temp: 22 },
                     { time: "12 PM", temp: 24 },
