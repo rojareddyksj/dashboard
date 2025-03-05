@@ -10,7 +10,7 @@ const { Title } = Typography;
 const App = () => {
     const [weather, setWeather] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [city] = useState("bangalore");
+    const [city] = useState("Chittoor");
     const [temperatureData, setTemperatureData] = useState([]);
     const [windSpeedData, setWindSpeedData] = useState([]);  // State for wind speed data
     const [weeklyData, setWeeklyData] = useState([]);
